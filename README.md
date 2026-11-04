@@ -4,7 +4,7 @@ A minimal asynchronous WebSocket echo-server example in Python. It accepts conne
 
 ## Current implementation
 
-- Uses the `websockets` Python package.
+- Uses the modern asyncio server API from the `websockets` package.
 - Handles incoming connections asynchronously.
 - Reads messages with an async iterator and responds with an `Echo:` prefix.
 - Keeps the server running until the process is stopped.
@@ -16,11 +16,11 @@ Python 3.10+.
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install websockets
+pip install -r requirements.txt
 python main.py
 ```
 
-The server listens at `ws://localhost:8765`.
+The server listens at `ws://127.0.0.1:8765`.
 
 ## Quick client test
 
@@ -31,7 +31,7 @@ import asyncio
 from websockets.asyncio.client import connect
 
 async def main():
-    async with connect("ws://localhost:8765") as websocket:
+    async with connect("ws://127.0.0.1:8765") as websocket:
         await websocket.send("hello")
         print(await websocket.recv())
 
@@ -51,4 +51,3 @@ This repository is an echo-server exercise, not yet a multi-room chat applicatio
 3. Add authentication and per-connection rate limiting.
 4. Add async tests for connection, messaging and disconnect scenarios.
 5. Add graceful shutdown, observability and deployment documentation.
-
