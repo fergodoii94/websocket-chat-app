@@ -1,4 +1,3 @@
-import asyncio
 import unittest
 
 from main import MAX_MESSAGE_SIZE, chat_handler
