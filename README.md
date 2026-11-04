@@ -2,12 +2,16 @@
 
 A minimal asynchronous WebSocket echo-server example in Python. It accepts connections on localhost port 8765 and sends each received message back to the same client.
 
+[![CI](https://github.com/fergodoii94/websocket-chat-app/actions/workflows/ci.yml/badge.svg)](https://github.com/fergodoii94/websocket-chat-app/actions/workflows/ci.yml)
+
 ## Current implementation
 
 - Uses the modern asyncio server API from the `websockets` package.
 - Handles incoming connections asynchronously.
 - Reads messages with an async iterator and responds with an `Echo:` prefix.
-- Keeps the server running until the process is stopped.
+- Enforces a 64 KiB maximum incoming message size.
+- Logs connection lifecycle events without writing message contents to application logs.
+- Includes unit tests for message echo behavior and the configured payload limit.
 
 ## Requirements and run
 
@@ -16,7 +20,7 @@ Python 3.10+.
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python main.py
 ```
 
@@ -40,14 +44,23 @@ asyncio.run(main())
 
 Expected response: `Echo: hello`.
 
+## Quality checks
+
+```bash
+ruff check main.py tests
+python -m unittest discover -s tests -v
+```
+
+GitHub Actions runs these checks on pushes and pull requests to `main`.
+
 ## Current limitations
 
-This repository is an echo-server exercise, not yet a multi-room chat application. It does not currently implement user identities, room management, message broadcasting, persistence, authentication, rate limiting, reconnect logic, a browser UI, automated tests or deployment configuration.
+This repository is an echo-server exercise, not yet a multi-room chat application. It does not currently implement user identities, room management, message broadcasting, persistence, authentication, rate limiting, reconnect logic, a browser UI or production deployment configuration. The server binds to loopback by default and is intended for local development.
 
 ## Suggested next steps
 
-1. Add structured message schemas and payload-size limits.
-2. Implement a connection manager and isolated chat rooms.
+1. Implement a connection manager and isolated chat rooms.
+2. Add structured message schemas and per-user payload quotas.
 3. Add authentication and per-connection rate limiting.
-4. Add async tests for connection, messaging and disconnect scenarios.
+4. Add integration tests against a real WebSocket server, including disconnect and oversized-payload cases.
 5. Add graceful shutdown, observability and deployment documentation.
