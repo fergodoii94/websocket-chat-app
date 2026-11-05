@@ -1,8 +1,16 @@
+<div align="center">
+
 # WebSocket Echo Server
 
-A minimal asynchronous WebSocket echo-server example in Python. It accepts connections on localhost port 8765 and sends each received message back to the same client.
+**An asynchronous Python example using persistent WebSocket connections.**
 
 [![CI](https://github.com/fergodoii94/websocket-chat-app/actions/workflows/ci.yml/badge.svg)](https://github.com/fergodoii94/websocket-chat-app/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![WebSocket](https://img.shields.io/badge/Protocol-WebSocket-010101)
+
+</div>
+
+A minimal asynchronous WebSocket echo-server example in Python. It accepts connections on localhost port 8765 and sends each received message back to the same client.
 
 ## Current implementation
 
@@ -13,9 +21,15 @@ A minimal asynchronous WebSocket echo-server example in Python. It accepts conne
 - Logs connection lifecycle events without writing message contents to application logs.
 - Includes unit tests for message echo behavior and the configured payload limit.
 
-## Requirements and run
+## Tech stack
 
-Python 3.10+.
+- Python 3.10+
+- asyncio
+- websockets
+- unittest
+- Ruff
+
+## Run locally
 
 ```bash
 python -m venv .venv
@@ -55,7 +69,9 @@ GitHub Actions runs these checks on pushes and pull requests to `main`.
 
 ## Current limitations
 
-This repository is an echo-server exercise, not yet a multi-room chat application. It does not currently implement user identities, room management, message broadcasting, persistence, authentication, rate limiting, reconnect logic, a browser UI or production deployment configuration. The server binds to loopback by default and is intended for local development.
+> **Portfolio scope:** This repository is an echo-server exercise, not yet a multi-room chat application.
+
+It does not currently implement user identities, room management, message broadcasting, persistence, authentication, rate limiting, reconnect logic, a browser UI or production deployment configuration. The server binds to loopback by default and is intended for local development.
 
 ## Suggested next steps
 
@@ -64,3 +80,9 @@ This repository is an echo-server exercise, not yet a multi-room chat applicatio
 3. Add authentication and per-connection rate limiting.
 4. Add integration tests against a real WebSocket server, including disconnect and oversized-payload cases.
 5. Add graceful shutdown, observability and deployment documentation.
+
+---
+
+<div align="center">
+  <sub>Part of my Python backend engineering portfolio.</sub>
+</div>
