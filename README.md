@@ -21,6 +21,13 @@ A minimal asynchronous WebSocket echo-server example in Python. It accepts conne
 - Logs connection lifecycle events without writing message contents to application logs.
 - Includes unit tests for message echo behavior and the configured payload limit.
 
+## Engineering decisions
+
+- **Async connection handling:** the handler uses an async iterator so messages are processed without blocking the event loop.
+- **Bounded payload size:** the server passes `MAX_MESSAGE_SIZE = 64 KiB` to `websockets.serve`, letting the WebSocket implementation reject oversized frames.
+- **Privacy-conscious logs:** connection and disconnection events are logged, but message contents are not written to application logs.
+- **Loopback binding:** the server listens on `127.0.0.1` for local development instead of exposing the exercise to a public interface by default.
+
 ## Tech stack
 
 - Python 3.10+
