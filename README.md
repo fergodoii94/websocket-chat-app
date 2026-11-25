@@ -19,7 +19,7 @@ A minimal asynchronous WebSocket echo-server example in Python. It accepts conne
 - Reads messages with an async iterator and responds with an `Echo:` prefix.
 - Enforces a 64 KiB maximum incoming message size.
 - Logs connection lifecycle events without writing message contents to application logs.
-- Includes unit tests for message echo behavior and the configured payload limit.
+- Includes unit tests for handler behavior plus live-server integration tests for echo responses and the WebSocket 1009 close code on oversized messages.
 
 ## Engineering decisions
 
@@ -27,6 +27,7 @@ A minimal asynchronous WebSocket echo-server example in Python. It accepts conne
 - **Bounded payload size:** the server passes `MAX_MESSAGE_SIZE = 64 KiB` to `websockets.serve`, letting the WebSocket implementation reject oversized frames.
 - **Privacy-conscious logs:** connection and disconnection events are logged, but message contents are not written to application logs.
 - **Loopback binding:** the server listens on `127.0.0.1` for local development instead of exposing the exercise to a public interface by default.
+- **Shared server factory:** `create_server()` centralizes the runtime configuration and lets integration tests launch the exact same handler and message-size limit on an ephemeral port.
 
 ## Tech stack
 
