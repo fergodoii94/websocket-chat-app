@@ -1,6 +1,9 @@
 import unittest
 
-from main import MAX_MESSAGE_SIZE, chat_handler
+from websockets.asyncio.client import connect
+from websockets.exceptions import ConnectionClosedError
+
+from main import MAX_MESSAGE_SIZE, chat_handler, create_server
 
 
 class FakeWebSocket:
@@ -29,6 +32,22 @@ class ChatHandlerTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_message_size_limit_is_explicit(self):
         self.assertEqual(MAX_MESSAGE_SIZE, 64 * 1024)
+
+    async def test_running_server_echoes_a_real_client_message(self):
+        async with create_server(port=0) as server:
+            port = server.sockets[0].getsockname()[1]
+            async with connect(f"ws://127.0.0.1:{port}") as websocket:
+                await websocket.send("integration hello")
+                self.assertEqual(await websocket.recv(), "Echo: integration hello")
+
+    async def test_running_server_closes_oversized_message_with_1009(self):
+        async with create_server(port=0) as server:
+            port = server.sockets[0].getsockname()[1]
+            async with connect(f"ws://127.0.0.1:{port}") as websocket:
+                await websocket.send("x" * (MAX_MESSAGE_SIZE + 1))
+                with self.assertRaises(ConnectionClosedError):
+                    await websocket.recv()
+                self.assertEqual(websocket.close_code, 1009)
 
 
 if __name__ == "__main__":
