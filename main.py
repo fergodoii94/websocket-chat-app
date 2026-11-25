@@ -21,13 +21,18 @@ async def chat_handler(websocket: ServerConnection) -> None:
         logger.info("WebSocket client disconnected")
 
 
-async def main() -> None:
-    async with serve(
+def create_server(host: str = HOST, port: int = PORT):
+    """Create the configured server so the same settings are exercised in tests."""
+    return serve(
         chat_handler,
-        HOST,
-        PORT,
+        host,
+        port,
         max_size=MAX_MESSAGE_SIZE,
-    ):
+    )
+
+
+async def main() -> None:
+    async with create_server():
         logger.info("WebSocket echo server listening on ws://%s:%s", HOST, PORT)
         await asyncio.Future()
 
